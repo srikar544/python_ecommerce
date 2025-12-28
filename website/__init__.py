@@ -2,6 +2,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from urllib.parse import quote_plus
+ 
+ 
+ 
 
 # ✅ db must be created at module level
 db = SQLAlchemy()
@@ -20,6 +23,8 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://root:{password}@localhost/ecommerce"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+    
+
     # ✅ initialize db
     db.init_app(app)
 
@@ -34,6 +39,7 @@ def create_app():
     app.register_blueprint(views)
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(cart_bp)
+   
 
     # ✅ login manager
     login_manager = LoginManager()

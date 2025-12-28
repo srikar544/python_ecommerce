@@ -1,8 +1,8 @@
 # Flask utilities
 from sqlalchemy.orm import joinedload
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
-from .models import Cart, CartItem, Product
+from .models import Cart, CartItem, OrderItem, Product
 from . import db
 
 cart_bp = Blueprint("cart", __name__)
@@ -96,3 +96,76 @@ def remove_from_cart(item_id):
 
     flash(f"{product_name} removed from cart", "info")
     return redirect(url_for("cart.view_cart"))
+
+@cart_bp.route("/cart/increase/<int:item_id>", methods=["POST"])
+@login_required
+def increase_quantity(item_id):
+    item = CartItem.query.get_or_404(item_id)
+    if item.quantity < item.product.stock:
+        item.quantity += 1
+        db.session.commit()
+    return redirect(url_for("cart.view_cart"))
+
+@cart_bp.route("/cart/decrease/<int:item_id>", methods=["POST"])
+@login_required
+def decrease_quantity(item_id):
+    item = CartItem.query.get_or_404(item_id)
+    if item.quantity > 1:
+        item.quantity -= 1
+        db.session.commit()
+    else:
+        db.session.delete(item)
+        db.session.commit()
+    return redirect(url_for("cart.view_cart"))
+
+@cart_bp.route("/checkout", methods=["GET", "POST"])
+@login_required
+def checkout():
+    cart = Cart.query.filter_by(user_id=current_user.id).first()
+    if not cart or not cart.items:
+        flash("Your cart is empty", "info")
+        return redirect(url_for("views.home"))
+
+    if request.method == "POST":
+        # Calculate total
+        total = sum(item.quantity * item.product.price for item in cart.items)
+
+        # Create new order
+        order = Order(user_id=current_user.id, total_amount=total)
+        db.session.add(order)
+        db.session.flush()  # Get order.id
+
+        # Move cart items to order items
+        for item in cart.items:
+            order_item = OrderItem(
+                order_id=order.id,
+                product_id=item.product.id,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+            db.session.add(order_item)
+            db.session.delete(item)  # Remove from cart
+
+        db.session.commit()
+        flash("Order placed successfully!", "success")
+        return redirect(url_for("views.home"))
+
+    # GET request: show cart summary
+    return render_template("checkout.html", items=cart.items)
+  
+    from flask import Blueprint, render_template
+from flask_login import login_required, current_user
+from .models import Order
+
+orders_bp = Blueprint("orders", __name__)
+
+@orders_bp.route("/orders")
+@login_required
+def order_history():
+    # Fetch all orders for current user, newest first
+    orders = Order.query.filter_by(user_id=current_user.id)\
+                        .order_by(Order.created_at.desc()).all()
+    return render_template("orders.html", orders=orders)
+
+
+

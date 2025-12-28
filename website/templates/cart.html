@@ -27,9 +27,30 @@
                 <button>Remove</button>
             </form>
         </td>
+        <td>
+        <form action="{{ url_for('cart.decrease_quantity', item_id=item.id) }}" method="post" style="display:inline;">
+        <button type="submit">−</button>
+        </form>
+        {{ item.quantity }}
+        <form action="{{ url_for('cart.increase_quantity', item_id=item.id) }}" method="post" style="display:inline;">
+        <button type="submit">+</button>
+         
+    </form>
+</td>
     </tr>
     {% endfor %}
+     <tr>
+            <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
+            <td colspan="2"><strong>${{ "%.2f"|format(total) }}</strong></td>
+        </tr>
 </table>
+<!-- Checkout button -->
+<div style="text-align:center; margin-top:20px;">
+    <a href="{{ url_for('cart.checkout') }}">
+        <button style="padding:10px 20px; font-size:16px;">Proceed to Checkout</button>
+    </a>
+</div>
+
 {% else %}
 <p>Your cart is empty</p>
 {% endif %}

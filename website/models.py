@@ -15,6 +15,7 @@ Technology:
 - MySQL backend
 """
 
+from datetime import datetime
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -191,3 +192,20 @@ class CartItem(db.Model):
             f"<CartItem {self.id} | "
             f"Product {self.product_id} x {self.quantity}>"
         )
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    total_amount = db.Column(db.Float)
+
+    items = db.relationship("OrderItem", backref="order", lazy=True)
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey("order.id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
+    quantity = db.Column(db.Integer)
+    price = db.Column(db.Float)  # Price at the time of purchase
+
+    product = db.relationship("Product")

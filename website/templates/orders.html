@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>My Orders</h1>
+
+{% if orders %}
+    {% for order in orders %}
+        <div class="order-card">
+            <h3>Order #{{ order.id }} - {{ order.created_at.strftime('%d %b %Y %H:%M') }}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set order_total = 0 %}
+                    {% for item in order.items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ "%.2f"|format(item.price) }}</td>
+                            <td>${{ "%.2f"|format(item.quantity * item.price) }}</td>
+                        </tr>
+                        {% set order_total = order_total + (item.quantity * item.price) %}
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3" style="text-align:right;"><strong>Order Total:</strong></td>
+                        <td><strong>${{ "%.2f"|format(order_total) }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>You have not placed any orders yet.</p>
+{% endif %}
+{% endblock %}
