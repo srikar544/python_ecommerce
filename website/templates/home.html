@@ -1,9 +1,70 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
 <h1>Products</h1>
 
-{% for product in products %}
-<div>
-    <h3>{{product.name}}</h3>
-    <p> {{product.price}}</p>
-    <small>{{product.category.name}}</small>
+<form method="GET" class="filter-form">
+    <select name="category">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if selected_category==cat.id %}selected{% endif %}>
+                {{ cat.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="sort">
+        <option value="name_asc">Name ↑</option>
+        <option value="name_desc">Name ↓</option>
+        <option value="price_asc">Price ↑</option>
+        <option value="price_desc">Price ↓</option>
+    </select>
+
+    <button type="submit">Apply</button>
+</form>
+
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <h3>{{ product.name }}</h3>
+        <p>${{ "%.2f"|format(product.price) }}</p>
+        <small>{{ product.category.name }}</small>
+
+        <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}">
+            <button>Add to CART</button>
+        </form>
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
+
+{% if total_pages > 0 %}
+<div class="pagination">
+    {% if pagination.has_prev %}
+        <a href="{{ url_for('views.home',
+            page=pagination.prev_num,
+            category=selected_category,
+            sort=selected_sort) }}">
+            « Prev
+        </a>
+    {% endif %}
+
+    <span>Page {{ pagination.page }} of {{ total_pages }}</span>
+
+    {% if pagination.has_next %}
+        <a href="{{ url_for('views.home',
+            page=pagination.next_num,
+            category=selected_category,
+            sort=selected_sort) }}">
+            Next »
+        </a>
+    {% endif %}
+</div>
+{% else %}
+<p class="no-results">No products found for this category.</p>
+{% endif %}
+
+{% endblock %}

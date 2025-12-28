@@ -1,23 +1,10 @@
-# Flask utilities for routing, flashing messages, redirects and templates
+# Flask utilities
+from sqlalchemy.orm import joinedload
 from flask import Blueprint, flash, redirect, render_template, url_for
-
-# Flask-Login utilities
-# current_user → gives the logged-in user object
-# login_required → protects routes so only logged-in users can access them
 from flask_login import current_user, login_required
-
-# Import database models
 from .models import Cart, CartItem, Product
-
-# SQLAlchemy database instance
 from . import db
 
-
-# ==================================================
-# CART BLUEPRINT
-# ==================================================
-# Blueprint allows cart-related routes to be grouped
-# under a single module (clean architecture)
 cart_bp = Blueprint("cart", __name__)
 
 
@@ -27,24 +14,21 @@ cart_bp = Blueprint("cart", __name__)
 @cart_bp.route("/cart")
 @login_required
 def view_cart():
-    """
-    Displays the current logged-in user's cart.
-    This route is protected — user must be logged in.
-    """
+    items = (
+        CartItem.query
+        .options(joinedload(CartItem.product))
+        .join(Cart)
+        .filter(Cart.user_id == current_user.id)
+        .all()
+    )
 
-    # current_user comes from Flask-Login
-    # Access cart using relationship: User → Cart
-    cart = current_user.cart
-
-    # If the user does not have a cart yet
-    if not cart:
+    if not items:
         flash("Your cart is empty", "info")
+        return render_template("cart.html", items=[], total=0)
 
-        # Send empty list so template doesn't break
-        return render_template("cart.html", items=[])
+    total = sum(item.product.price * item.quantity for item in items)
 
-    # Pass all cart items to the template
-    return render_template("cart.html", items=cart.items)
+    return render_template("cart.html", items=items, total=total)
 
 
 # ==================================================
@@ -53,50 +37,40 @@ def view_cart():
 @cart_bp.route("/add-to-cart/<int:product_id>", methods=["POST"])
 @login_required
 def add_to_cart(product_id):
-    """
-    Adds a product to the logged-in user's cart.
-    - Creates a cart if it doesn't exist
-    - Increases quantity if product already exists
-    """
+    """Add a product to cart."""
 
-    # Fetch product by ID
-    # If product doesn't exist → 404 error automatically
     product = Product.query.get_or_404(product_id)
 
-    # Check if user already has a cart
-    if not current_user.cart:
-        # Create a new cart for this user
+    # Stock validation
+    if product.stock < 1:
+        flash("Product is out of stock", "error")
+        return redirect(url_for("views.home"))
+
+    # Ensure user has a cart
+    cart = current_user.cart
+    if not cart:
         cart = Cart(user_id=current_user.id)
         db.session.add(cart)
-        db.session.commit()  # commit required to get cart.id
-    else:
-        cart = current_user.cart
+        db.session.flush()  # get cart.id
 
-    # Check if this product is already present in the cart
+    # Check if product already exists
     cart_item = CartItem.query.filter_by(
-        cart_id=cart.id,
-        product_id=product.id
+        cart_id=cart.id, product_id=product.id
     ).first()
 
     if cart_item:
-        # If product already exists → increase quantity
-        cart_item.quantity += 1
+        if cart_item.quantity >= product.stock:
+            flash("No more stock available", "warning")
+        else:
+            cart_item.quantity += 1
+            flash(f"{product.name} quantity updated in cart", "success")
     else:
-        # If product is new → create CartItem entry
-        cart_item = CartItem(
-            cart_id=cart.id,
-            product_id=product.id,
-            quantity=1
-        )
+        cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
         db.session.add(cart_item)
+        flash(f"{product.name} added to cart", "success")
 
-    # Save changes to database
     db.session.commit()
-
-    flash(f"{product.name} added to cart", "success")
-
-    # Redirect back to home page
-    return redirect(url_for("views.home"))
+    return redirect(url_for("cart.view_cart"))  # redirect clears flash properly
 
 
 # ==================================================
@@ -105,25 +79,20 @@ def add_to_cart(product_id):
 @cart_bp.route("/remove-from-cart/<int:item_id>", methods=["POST"])
 @login_required
 def remove_from_cart(item_id):
-    """
-    Removes a specific item from the user's cart.
-    """
+    cart_item = (
+        CartItem.query
+        .options(joinedload(CartItem.product))
+        .get_or_404(item_id)
+    )
 
-    # Fetch cart item or return 404 if invalid ID
-    cart_item = CartItem.query.get_or_404(item_id)
-
-    # SECURITY CHECK:
-    # Ensure the cart item belongs to the logged-in user
-    # Prevents deleting other users' cart items
     if cart_item.cart.user_id != current_user.id:
         flash("Unauthorized action", "error")
         return redirect(url_for("cart.view_cart"))
 
-    # Delete the cart item
+    product_name = cart_item.product.name  # SAFE now
+
     db.session.delete(cart_item)
     db.session.commit()
 
-    flash("Item removed from cart", "info")
-
-    # Redirect back to cart page
+    flash(f"{product_name} removed from cart", "info")
     return redirect(url_for("cart.view_cart"))

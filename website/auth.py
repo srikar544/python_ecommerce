@@ -49,7 +49,10 @@ def login():
             return redirect(url_for("views.home"))
 
         # If login fails, show an error message
-        flash("Invalid credentials", "error")
+        flash("Invalid credentials. Please sign up first!", "error")
+        return redirect(url_for("auth.sign_up"))
+
+
 
     # Render login page for GET request
     return render_template("login.html")

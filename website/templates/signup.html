@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- Signup/Login CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <h1>Create Account</h1>
+        <form method="POST" action="{{ url_for('auth.sign_up') }}" autocomplete="off">
+            <!-- Fake hidden field to prevent browser autofill -->
+            <input type="text" name="fakeusernameremembered" style="display:none">
+
+            <input type="text" name="firstname" placeholder="First Name" required autocomplete="new-firstname"><br>
+            <input type="email" name="email" placeholder="Email" required autocomplete="new-email"><br>
+            <input type="password" name="password" placeholder="Password" required autocomplete="new-password"><br>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p class="redirect-text">
+            Already have an account? 
+            <a href="{{ url_for('auth.login') }}">Login here</a>
+        </p>
+    </div>
+</body>
+</html>

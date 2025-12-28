@@ -1,55 +1,49 @@
-"""
-VIEWS.PY
-========
-This file contains routes related to displaying pages
-that do NOT require authentication.
-
-Responsibilities:
-- Load products from database
-- Load categories
-- Send data to templates (HTML)
-"""
-
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from .models import Product, Category
 
-
-# --------------------------------------------------
-# Blueprint for main site pages
-# --------------------------------------------------
-# Blueprint name = "views"
-# __name__ helps Flask locate templates & static files
 views = Blueprint("views", __name__)
 
-
-# --------------------------------------------------
-# HOME PAGE ROUTE
-# --------------------------------------------------
 @views.route("/")
 def home():
-    """
-    Home page of the application.
+    # Query parameters
+    category_id = request.args.get("category", type=int)
+    sort = request.args.get("sort", default="name_asc")
+    page = request.args.get("page", default=1, type=int)
+    per_page = 6
 
-    Flow:
-    1. Fetch all products from database
-    2. Fetch all categories from database
-    3. Pass both to the HTML template
-    4. Jinja renders the data dynamically
-    """
+    # Base query
+    query = Product.query
 
-    # Query all products from Product table
-    # Equivalent SQL: SELECT * FROM product;
-    products = Product.query.all()
+    # Filter by category
+    if category_id:
+        query = query.filter_by(category_id=category_id)
 
-    # Query all categories from Category table
-    # Equivalent SQL: SELECT * FROM category;
-    categories = Category.query.all()
+    # Sorting
+    if sort == "price_asc":
+        query = query.order_by(Product.price.asc())
+    elif sort == "price_desc":
+        query = query.order_by(Product.price.desc())
+    elif sort == "name_desc":
+        query = query.order_by(Product.name.desc())
+    else:
+        query = query.order_by(Product.name.asc())
 
-    # Render home.html and pass data to it
-    # products → accessible in template
-    # categories → accessible in template
+    # Pagination
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+
+    
+    total_pages = pagination.pages if pagination.total > 0 else 0
+
+    # Categories
+    categories = Category.query.order_by(Category.name.asc()).all()
+
     return render_template(
         "home.html",
-        products=products,
-        categories=categories
+        products=pagination.items,
+        categories=categories,
+        pagination=pagination,
+        selected_category=category_id,
+        selected_sort=sort,
+        page=page,
+        total_pages=total_pages
     )

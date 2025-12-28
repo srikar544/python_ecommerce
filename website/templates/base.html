@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Shop</title>
+
+    <!-- GLOBAL CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <a href="{{ url_for('views.home') }}" class="logo">E-Shop</a>
+    </div>
+
+    <div class="nav-right">
+        {% if current_user.is_authenticated %}
+            <span class="welcome">Hello, {{ current_user.first_name }}</span>
+
+            <a href="{{ url_for('cart.view_cart') }}" class="nav-link cart-link">
+                Cart
+                {% if cart_count > 0 %}
+                    <span class="cart-badge">{{ cart_count }}</span>
+                {% endif %}
+            </a>
+
+            <a href="{{ url_for('auth.logout') }}" class="nav-link logout">Logout</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}" class="nav-link">Login</a>
+            <a href="{{ url_for('auth.sign_up') }}" class="nav-link">Sign Up</a>
+        {% endif %}
+    </div>
+</nav>
+
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

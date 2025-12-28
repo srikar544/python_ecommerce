@@ -1,0 +1,62 @@
+/* cart.css - specific styles for cart.html */
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+button {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+}
+
+button:hover {
+    background-color: #c82333;
+}
+
+.flash-messages {
+    margin: 10px 0;
+    padding: 0 20px;
+}
+
+.flash {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash.info {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.flash.warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
