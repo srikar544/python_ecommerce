@@ -172,9 +172,12 @@ project/
 
   **Output:**
    Run python run.py from your root project
+   
    <img width="1012" height="437" alt="image" src="https://github.com/user-attachments/assets/93ce0964-c471-4961-a5f7-c4f592482b87" />
 
    <img width="1894" height="915" alt="image" src="https://github.com/user-attachments/assets/29d75f10-3d0b-4a0a-b101-9159b4d569aa" />
+
+   Click on Login button
 
    <img width="1285" height="767" alt="image" src="https://github.com/user-attachments/assets/3aefcc3e-fb84-45b5-8a59-75d16d8378f5" />
 
