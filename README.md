@@ -202,6 +202,33 @@ project/
 
 
 
+  SELECT * FROM user;
+
+  <img width="835" height="399" alt="image" src="https://github.com/user-attachments/assets/e26bc53a-248c-460a-9b6d-42b1aaff9c99" />
+
+  SELECT * FROM category; 
+
+   <img width="595" height="451" alt="image" src="https://github.com/user-attachments/assets/471ae3b7-04c4-4e47-bfce-8bf2e921710e" />
+
+  SELECT * FROM product
+
+  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b2251dac-5d96-4a14-8ecc-e2db257fde06" />
+
+  SELECT * FROM cart; 
+
+  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f2902a76-64a4-4ab2-9742-fd0ba23b4c65" />
+
+  SELECT * FROM cart_item; 
+
+  <img width="453" height="192" alt="image" src="https://github.com/user-attachments/assets/9538def6-fb3a-4640-a6f5-0e8ed5086c37" />
+
+  SELECT * FROM `order`;
+
+  <img width="421" height="327" alt="image" src="https://github.com/user-attachments/assets/ecdaa226-2eaf-413a-be6d-1c9b78964d19" />
+
+  SELECT * FROM order_item;
+
+  <img width="427" height="345" alt="image" src="https://github.com/user-attachments/assets/1e3fe84f-e093-425a-ac86-118439a14aad" />
 
 
 
