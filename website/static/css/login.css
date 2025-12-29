@@ -1,49 +1,139 @@
-/* login.css */
+/* ==================================================
+   LOGIN / SIGNUP PAGE STYLES
+   File: login.css
+   ==================================================
+   This file styles:
+   - Login page
+   - Signup page
+   - Flash messages shown on auth screens
+*/
 
+
+/* ==================================================
+   AUTH CONTAINER
+   ==================================================
+   Main card that wraps the login/signup form
+*/
 .auth-container {
-    width: 350px;
-    margin: 80px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
-    text-align: center;
+    width: 350px;                 /* Fixed card width */
+    margin: 80px auto;            /* Center horizontally + top spacing */
+    padding: 30px;                /* Inner spacing */
+    background-color: #fff;       /* White background */
+    border-radius: 8px;           /* Rounded corners */
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.1); /* Soft shadow */
+    text-align: center;           /* Center text inside */
 }
 
+
+/* ==================================================
+   PAGE HEADING
+   ==================================================
+   Login / Create Account title
+*/
 .auth-container h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
+    margin-bottom: 20px;          /* Space below heading */
+    font-size: 24px;              /* Heading size */
+    color: #333;                  /* Dark gray text */
 }
 
+
+/* ==================================================
+   FORM INPUT FIELDS
+   ==================================================
+   Styles email, password, name inputs
+*/
 .auth-container form input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+    width: 90%;                   /* Slightly smaller than container */
+    padding: 10px;                /* Inner spacing for typing */
+    margin: 10px 0;               /* Space between inputs */
+    border-radius: 4px;           /* Rounded corners */
+    border: 1px solid #ccc;       /* Light gray border */
+    font-size: 14px;              /* Text size */
 }
 
+
+/* ==================================================
+   FORM SUBMIT BUTTON
+   ==================================================
+   Login / Sign Up button
+*/
 .auth-container form button {
-    width: 95%;
-    padding: 12px;
-    margin-top: 15px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    width: 95%;                   /* Slightly wider than inputs */
+    padding: 12px;                /* Button height */
+    margin-top: 15px;             /* Space above button */
+    background-color: #007BFF;    /* Bootstrap blue */
+    color: #fff;                  /* White text */
+    border: none;                 /* Remove default border */
+    border-radius: 5px;           /* Rounded corners */
+    font-size: 16px;              /* Larger text for emphasis */
+    cursor: pointer;              /* Hand cursor on hover */
 }
 
+
+/* ==================================================
+   REDIRECT TEXT
+   ==================================================
+   "Already have an account?" / "Sign up here"
+*/
 .redirect-text {
-    margin-top: 15px;
-    font-size: 14px;
+    margin-top: 15px;             /* Space above text */
+    font-size: 14px;              /* Smaller text */
 }
 
-.flash-messages { margin-bottom: 15px; }
-.flash { padding: 10px 15px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; }
-.flash.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.flash.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-.flash.info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-.flash.warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+/* ==================================================
+   FLASH MESSAGE CONTAINER
+   ==================================================
+   Wraps all flash alerts
+*/
+.flash-messages {
+    margin-bottom: 15px;          /* Space below messages */
+}
+
+
+/* ==================================================
+   BASE FLASH MESSAGE STYLE
+   ==================================================
+   Common styles for all message types
+*/
+.flash {
+    padding: 10px 15px;           /* Inner spacing */
+    border-radius: 4px;           /* Rounded corners */
+    margin-bottom: 10px;          /* Space between messages */
+    font-size: 14px;              /* Text size */
+}
+
+
+/* ==================================================
+   FLASH MESSAGE TYPES
+   ==================================================
+   Colors depend on message category
+*/
+
+/* SUCCESS MESSAGE */
+.flash.success {
+    background-color: #d4edda;    /* Light green */
+    color: #155724;               /* Dark green text */
+    border: 1px solid #c3e6cb;
+}
+
+/* ERROR MESSAGE */
+.flash.error {
+    background-color: #f8d7da;    /* Light red */
+    color: #721c24;               /* Dark red text */
+    border: 1px solid #f5c6cb;
+}
+
+/* INFO MESSAGE */
+.flash.info {
+    background-color: #d1ecf1;    /* Light blue */
+    color: #0c5460;               /* Dark blue text */
+    border: 1px solid #bee5eb;
+}
+
+/* WARNING MESSAGE */
+.flash.warning {
+    background-color: #fff3cd;    /* Light yellow */
+    color: #856404;               /* Dark yellow text */
+    border: 1px solid #ffeeba;
+}
