@@ -67,7 +67,15 @@ User
 
 ##  Project Structure
 
-```text
+
+---
+
+## 🔥 Pro Tip (Best Practice)
+
+If GitHub **still** breaks it, use this instead (100% safe):
+
+```md
+<pre>
 project/
 │
 ├── app/
@@ -88,7 +96,7 @@ project/
 ├── requirements.txt
 ├── run.py
 └── README.md
-
+</pre>
 
 
 **Database Models**
