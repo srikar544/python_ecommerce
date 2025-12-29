@@ -1,131 +1,136 @@
-/* Reset small defaults */
+/* ==================================================
+   BASE STYLES / GLOBAL CSS
+   File: base.css
+   ================================================== */
+
+
+/* ==================================================
+   RESET & BODY
+   ==================================================
+   Remove default margin, set font and background
+*/
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f5f7fa;   /* light gray */
-    color: #1f2937;
+    margin: 0; /* Remove default browser margin */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* Modern system fonts */
+    background-color: #f5f7fa; /* Light gray background */
+    color: #1f2937;             /* Dark gray text */
 }
 
-/* NAVBAR */
+
+/* ==================================================
+   NAVBAR
+   ==================================================
+   Top navigation bar layout
+*/
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 12px 24px;
-    background-color: #1f2933;
-    color: #ffffff;
+    display: flex;                 /* Horizontal flex layout */
+    justify-content: space-between; /* Space between left & right sections */
+    align-items: center;           /* Vertically center items */
+    padding: 14px 32px;            /* Spacing inside navbar */
+    background-color: #1f2937;     /* Dark background */
+    color: white;                  /* White text */
 }
 
-/* LEFT SIDE */
+
+/* ==================================================
+   NAV LEFT (LOGO)
+   ==================================================
+   Site logo styling
+*/
 .nav-left .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #ffffff;
-    text-decoration: none;
+    font-size: 22px;               /* Slightly larger text */
+    font-weight: bold;             /* Bold font for emphasis */
+    color: white;                  /* White text */
+    text-decoration: none;         /* Remove underline */
 }
 
-/* RIGHT SIDE */
+
+/* ==================================================
+   NAV RIGHT (USER LINKS)
+   ==================================================
+   Container for login, logout, cart links
+*/
 .nav-right {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: center;           /* Vertically center links */
+    gap: 18px;                     /* Space between each link */
 }
 
+
+/* ==================================================
+   WELCOME MESSAGE
+   ==================================================
+*/
 .welcome {
+    font-weight: 500;              /* Medium font weight */
+    opacity: 0.9;                  /* Slightly transparent */
     font-size: 14px;
-    opacity: 0.9;
 }
 
-/* LINKS */
+
+/* ==================================================
+   NAV LINKS
+   ==================================================
+   Common styling for all navbar links
+*/
 .nav-link {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 14px;
+    color: white;
+    text-decoration: none;         /* Remove underline */
+    font-weight: 500;
     padding: 6px 10px;
-    border-radius: 4px;
+    border-radius: 4px;            /* Rounded corners for hover effect */
 }
 
 .nav-link:hover {
-    background-color: #374151;
+    text-decoration: underline;    /* Underline on hover */
+    background-color: #374151;     /* Slight dark hover */
 }
 
-/* LOGOUT special */
+
+/* ==================================================
+   LOGOUT LINK
+   ==================================================
+   Special styling for logout button
+*/
 .logout {
-    background-color: #dc2626;
+    color: #f87171;                /* Light red text */
 }
 
 .logout:hover {
-    background-color: #b91c1c;
+    background-color: #b91c1c;     /* Dark red on hover */
 }
 
-/* PAGE CONTAINER */
+
+/* ==================================================
+   PAGE CONTAINER
+   ==================================================
+   Centers the page content and adds padding
+*/
 .container {
-    padding: 24px;
+    max-width: 1100px;             /* Limit content width */
+    margin: 30px auto;             /* Center horizontally with vertical spacing */
+    padding: 0 20px;               /* Horizontal padding inside container */
 }
 
-/* ===== NAVBAR ===== */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 32px;
-    background-color: #1f2937; /* dark */
-    color: white;
-}
 
-.nav-left .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-}
-
-.nav-link {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.nav-link:hover {
-    text-decoration: underline;
-}
-
-.logout {
-    color: #f87171;
-}
-
-.welcome {
-    font-weight: 500;
-    opacity: 0.9;
-}
-
-/* Page container */
-.container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
+/* ==================================================
+   CART LINK / BADGE
+   ==================================================
+   Displays number of items in cart as a badge
+*/
 .cart-link {
-    position: relative;
+    position: relative;            /* Needed for absolute badge positioning */
 }
 
 .cart-badge {
-    position: absolute;
+    position: absolute;            /* Position badge on top-right of cart icon */
     top: -6px;
     right: -10px;
-    background-color: #ef4444;
+    background-color: #ef4444;     /* Red badge */
     color: white;
     font-size: 12px;
     font-weight: bold;
     padding: 2px 6px;
-    border-radius: 999px;
-    line-height: 1;
+    border-radius: 999px;          /* Circle/rounded badge */
+    line-height: 1;                /* Tight text inside badge */
 }

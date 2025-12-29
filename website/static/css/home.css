@@ -1,14 +1,27 @@
-/* home.css */
+/* ==================================================
+   HOME PAGE / PRODUCTS / ORDERS STYLES
+   File: home.css
+   ================================================== */
 
-/* Container for product grid */
+
+/* ==================================================
+   PRODUCT GRID CONTAINER
+   ==================================================
+   Displays all products in a responsive grid
+*/
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin: 20px 0;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 20px;      /* Space between product cards */
+    margin: 20px 0; /* Space above and below grid */
 }
 
-/* Individual product cards */
+
+/* ==================================================
+   INDIVIDUAL PRODUCT CARDS
+   ==================================================
+   Each product's card with shadow and hover effect
+*/
 .product-card {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -16,12 +29,12 @@
     padding: 15px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* smooth hover animation */
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    transform: translateY(-5px);                     /* Lift card slightly */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);         /* Deeper shadow */
 }
 
 .product-card h3 {
@@ -33,19 +46,24 @@
 .product-card p {
     font-size: 16px;
     font-weight: bold;
-    color: #007BFF;
+    color: #007BFF; /* Blue price text */
     margin: 5px 0;
 }
 
 .product-card small {
-    color: #666;
+    color: #666; /* Category or extra info */
 }
 
-/* Buttons */
+
+/* ==================================================
+   PRODUCT CARD BUTTON
+   ==================================================
+   Add to cart button
+*/
 .product-card button {
     padding: 8px 15px;
     margin-top: 10px;
-    background-color: #28a745;
+    background-color: #28a745; /* Green button */
     border: none;
     border-radius: 5px;
     color: #fff;
@@ -55,15 +73,20 @@
 }
 
 .product-card button:hover {
-    background-color: #218838;
+    background-color: #218838; /* Darker green on hover */
 }
 
-/* Filter and sorting form */
+
+/* ==================================================
+   FILTER / SORT FORM
+   ==================================================
+   Dropdowns and apply button at top of products
+*/
 .filter-form {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-items: center;
+    gap: 10px;            /* Space between inputs */
+    margin-bottom: 20px;  /* Space below form */
+    align-items: center;   /* Vertically center inputs */
 }
 
 .filter-form select {
@@ -76,17 +99,22 @@
     padding: 6px 12px;
     border-radius: 5px;
     border: none;
-    background-color: #007BFF;
+    background-color: #007BFF; /* Blue button */
     color: #fff;
     cursor: pointer;
     transition: background 0.2s ease;
 }
 
 .filter-form button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
-/* Pagination */
+
+/* ==================================================
+   PAGINATION STYLES
+   ==================================================
+   Page numbers and next/prev links
+*/
 .pagination {
     margin-top: 20px;
     text-align: center;
@@ -108,7 +136,12 @@
     color: #fff;
 }
 
-/* Flash messages */
+
+/* ==================================================
+   FLASH MESSAGES
+   ==================================================
+   Success, error, info, warning messages
+*/
 .flash-messages {
     margin-bottom: 15px;
 }
@@ -125,6 +158,12 @@
 .flash.info    { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
 .flash.warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
 
+
+/* ==================================================
+   ORDER CARDS
+   ==================================================
+   Display individual orders in order history
+*/
 .order-card {
     background-color: #fff;
     padding: 15px;
@@ -136,4 +175,3 @@
 .order-card h3 {
     margin-bottom: 10px;
 }
-

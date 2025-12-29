@@ -1,68 +1,131 @@
+# Import core Flask class to create the web application
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user
-from urllib.parse import quote_plus
- 
- 
- 
 
-# ✅ db must be created at module level
+# SQLAlchemy is the ORM used to interact with the database
+from flask_sqlalchemy import SQLAlchemy
+
+# Flask-Login handles user authentication (login, logout, sessions)
+from flask_login import LoginManager, current_user
+
+# Used to safely encode special characters in the database password
+from urllib.parse import quote_plus
+
+
+# --------------------------------------------------
+# Create the database object at MODULE LEVEL
+# This allows models to import and use `db`
+# --------------------------------------------------
 db = SQLAlchemy()
 
 
 def create_app():
+    """
+    Application factory function.
+    This function creates and configures the Flask app instance.
+    """
+
+    # Create Flask app instance
     app = Flask(
         __name__,
-        static_folder="static",
-        template_folder="templates"
+        static_folder="static",     # Folder for CSS, JS, images
+        template_folder="templates"  # Folder for HTML templates
     )
 
+    # Encode password so special characters like @ don't break the DB URL
     password = quote_plus("FirstApp@123")
 
+    # --------------------------------------------------
+    # Application configuration
+    # --------------------------------------------------
+
+    # Secret key is used for sessions, cookies, CSRF protection
     app.config["SECRET_KEY"] = "secret-key"
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://root:{password}@localhost/ecommerce"
+
+    # Database connection string (MySQL using PyMySQL driver)
+    app.config["SQLALCHEMY_DATABASE_URI"] = (
+        f"mysql+pymysql://root:{password}@localhost/ecommerce"
+    )
+
+    #dialect+driver://username:password@host/database_name
+
+    # Disable modification tracking for better performance
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    
 
-    # ✅ initialize db
+    # --------------------------------------------------
+    # Initialize SQLAlchemy with the Flask app
+    # --------------------------------------------------
     db.init_app(app)
 
-    # ✅ import models AFTER db init
+    # --------------------------------------------------
+    # Import models AFTER initializing db
+    # This avoids circular import problems
+    # --------------------------------------------------
     from . import models
 
-    # ✅ register blueprints
-    from .views import views
-    from .auth import auth
-    from .cart import cart_bp
+
+    # --------------------------------------------------
+    # Register Blueprints (modular route groups)
+    # --------------------------------------------------
+    from .views import views     # main website routes
+    from .auth import auth       # authentication routes
+    from .cart import cart_bp    # shopping cart routes
 
     app.register_blueprint(views)
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(cart_bp)
-   
 
-    # ✅ login manager
+
+    # --------------------------------------------------
+    # Setup Flask-Login
+    # --------------------------------------------------
     login_manager = LoginManager()
+
+    # If a user tries to access a protected page,
+    # they will be redirected to this login route
     login_manager.login_view = "auth.login"
+
+    # Attach login manager to the app
     login_manager.init_app(app)
 
+    # Import User model for login handling
     from .models import User
 
     @login_manager.user_loader
     def load_user(user_id):
+        """
+        This function tells Flask-Login how to get a user
+        from the database using the user ID stored in session.
+        """
         return User.query.get(int(user_id))
 
-    # ✅ create tables
+
+    # --------------------------------------------------
+    # Create database tables (only if they don't exist)
+    # --------------------------------------------------
     with app.app_context():
         db.create_all()
 
-    # ✅ context processor for cart count
+
+    # --------------------------------------------------
+    # Context processor (runs before every template render)
+    # Used to make cart_count available in ALL templates
+    # --------------------------------------------------
     @app.context_processor
     def inject_cart_count():
-        from .models import Cart  # import here to avoid circular import
+        # Import here to avoid circular import issues
+        from .models import Cart
+
+        # Only check cart if user is logged in
         if current_user.is_authenticated:
             cart = Cart.query.filter_by(user_id=current_user.id).first()
-            return {"cart_count": cart.total_items() if cart else 0}
+            return {
+                "cart_count": cart.total_items() if cart else 0
+            }
+
+        # For guest users
         return {"cart_count": 0}
 
+
+    # Return the fully configured app
     return app

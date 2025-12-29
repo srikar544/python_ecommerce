@@ -1,13 +1,53 @@
+{# ==================================================
+   EXTEND BASE LAYOUT
+   ==================================================
+   This template inherits base.html
+   base.html usually contains:
+   - header / navbar
+   - footer
+   - global CSS / JS
+#}
 {% extends "base.html" %}
 
+
+{# ==================================================
+   MAIN CONTENT BLOCK
+   ==================================================
+   Everything inside this block replaces
+   {% block content %} in base.html
+#}
 {% block content %}
+
 <h1>My Orders</h1>
 
+
+{# ==================================================
+   CHECK IF USER HAS ORDERS
+   ==================================================
+   'orders' is passed from Flask route
+#}
 {% if orders %}
+
+    {# ----------------------------------------------
+       LOOP THROUGH EACH ORDER
+       ---------------------------------------------- #}
     {% for order in orders %}
+
         <div class="order-card">
-            <h3>Order #{{ order.id }} - {{ order.created_at.strftime('%d %b %Y %H:%M') }}</h3>
+
+            {# Order header with ID and formatted date #}
+            <h3>
+                Order #{{ order.id }}
+                -
+                {{ order.created_at.strftime('%d %b %Y %H:%M') }}
+            </h3>
+
+
+            {# ------------------------------------------
+               ORDER ITEMS TABLE
+               ------------------------------------------ #}
             <table>
+
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -16,27 +56,63 @@
                         <th>Total</th>
                     </tr>
                 </thead>
+
                 <tbody>
+
+                    {# Initialize order total accumulator #}
                     {% set order_total = 0 %}
+
+                    {# Loop through items inside this order #}
                     {% for item in order.items %}
                         <tr>
                             <td>{{ item.product.name }}</td>
                             <td>{{ item.quantity }}</td>
+
+                            {# Price at time of purchase #}
                             <td>${{ "%.2f"|format(item.price) }}</td>
-                            <td>${{ "%.2f"|format(item.quantity * item.price) }}</td>
+
+                            {# quantity × price #}
+                            <td>
+                                ${{ "%.2f"|format(item.quantity * item.price) }}
+                            </td>
                         </tr>
-                        {% set order_total = order_total + (item.quantity * item.price) %}
+
+                        {# Add item total to order total #}
+                        {% set order_total =
+                            order_total + (item.quantity * item.price)
+                        %}
                     {% endfor %}
+
+
+                    {# --------------------------------------
+                       ORDER TOTAL ROW
+                       -------------------------------------- #}
                     <tr>
-                        <td colspan="3" style="text-align:right;"><strong>Order Total:</strong></td>
-                        <td><strong>${{ "%.2f"|format(order_total) }}</strong></td>
+                        <td colspan="3" style="text-align:right;">
+                            <strong>Order Total:</strong>
+                        </td>
+                        <td>
+                            <strong>
+                                ${{ "%.2f"|format(order_total) }}
+                            </strong>
+                        </td>
                     </tr>
+
                 </tbody>
             </table>
+
             <hr>
         </div>
+
     {% endfor %}
+
 {% else %}
+
+    {# ----------------------------------------------
+       NO ORDERS CASE
+       ---------------------------------------------- #}
     <p>You have not placed any orders yet.</p>
+
 {% endif %}
+
 {% endblock %}

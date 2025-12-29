@@ -1,61 +1,103 @@
-/* cart.css - specific styles for cart.html */
+/* ==================================================
+   CART PAGE STYLES
+   File: cart.css
+   ==================================================
+   Styles the cart table, buttons, and flash messages
+*/
 
+
+/* ==================================================
+   CART TABLE
+   ==================================================
+   Table that displays all cart items
+*/
 table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    width: 80%;                        /* Table width */
+    margin: 20px auto;                  /* Center table with vertical spacing */
+    border-collapse: collapse;          /* Remove gaps between cells */
+    background-color: #fff;             /* White background for table */
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.1); /* Light shadow */
 }
 
+
+/* ==================================================
+   TABLE CELLS
+   ==================================================
+   Padding, border, and text alignment
+*/
 th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: center;
+    padding: 10px;                      /* Inner spacing */
+    border: 1px solid #ccc;             /* Light gray border */
+    text-align: center;                  /* Centered text */
 }
 
+
+/* ==================================================
+   TABLE HEADER
+   ==================================================
+   Highlight header row
+*/
 th {
-    background-color: #007bff;
-    color: white;
+    background-color: #007bff;          /* Blue header background */
+    color: white;                        /* White text */
 }
 
+
+/* ==================================================
+   BUTTONS
+   ==================================================
+   Remove, +, − buttons
+*/
 button {
-    background-color: #dc3545;
-    color: white;
-    padding: 5px 10px;
+    background-color: #dc3545;          /* Red button */
+    color: white;                        /* White text */
+    padding: 5px 10px;                  /* Inner spacing */
+    border: none;                        /* Remove default border */
+    border-radius: 4px;                  /* Slightly rounded */
+    cursor: pointer;                     /* Pointer cursor on hover */
 }
 
 button:hover {
-    background-color: #c82333;
+    background-color: #c82333;          /* Darker red on hover */
 }
 
+
+/* ==================================================
+   FLASH MESSAGES
+   ==================================================
+   Feedback messages like success, warning, info
+*/
 .flash-messages {
-    margin: 10px 0;
-    padding: 0 20px;
+    margin: 10px 0;                      /* Vertical spacing */
+    padding: 0 20px;                     /* Horizontal spacing */
 }
 
 .flash {
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    border-radius: 5px;
-    font-weight: bold;
+    padding: 10px 15px;                  /* Inner spacing */
+    margin-bottom: 8px;                  /* Space below each flash */
+    border-radius: 5px;                  /* Rounded corners */
+    font-weight: bold;                    /* Emphasize message */
 }
 
+/* Success message (green) */
 .flash.success {
     background-color: #d4edda;
     color: #155724;
 }
 
+/* Info message (blue) */
 .flash.info {
     background-color: #cce5ff;
     color: #004085;
 }
 
+/* Warning message (yellow) */
 .flash.warning {
     background-color: #fff3cd;
     color: #856404;
 }
 
+/* Error message (red) */
 .flash.error {
     background-color: #f8d7da;
     color: #721c24;

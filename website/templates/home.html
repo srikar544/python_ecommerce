@@ -1,70 +1,161 @@
 {% extends "base.html" %}
 
+{# ==================================================
+   EXTRA CSS FOR HOME PAGE
+   ==================================================
+   This block injects page-specific CSS into base.html
+#}
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 {% endblock %}
 
+
 {% block content %}
+
+<!-- ==================================================
+     PAGE TITLE
+     ================================================== -->
 <h1>Products</h1>
 
+
+<!-- ==================================================
+     FILTER & SORT FORM
+     ==================================================
+     Uses GET method so filters appear in the URL
+     Example:
+     /?category=2&sort=price_desc&page=1
+-->
 <form method="GET" class="filter-form">
+
+    <!-- -------------------------------
+         CATEGORY FILTER DROPDOWN
+         ------------------------------- -->
     <select name="category">
         <option value="">All Categories</option>
+
         {% for cat in categories %}
-            <option value="{{ cat.id }}" {% if selected_category==cat.id %}selected{% endif %}>
+            <option value="{{ cat.id }}"
+                {% if selected_category == cat.id %}selected{% endif %}>
                 {{ cat.name }}
             </option>
         {% endfor %}
     </select>
 
+
+    <!-- -------------------------------
+         SORT OPTIONS DROPDOWN
+         ------------------------------- -->
     <select name="sort">
-        <option value="name_asc">Name ↑</option>
-        <option value="name_desc">Name ↓</option>
-        <option value="price_asc">Price ↑</option>
-        <option value="price_desc">Price ↓</option>
+        <option value="name_asc"
+            {% if selected_sort == "name_asc" %}selected{% endif %}>
+            Name ↑
+        </option>
+
+        <option value="name_desc"
+            {% if selected_sort == "name_desc" %}selected{% endif %}>
+            Name ↓
+        </option>
+
+        <option value="price_asc"
+            {% if selected_sort == "price_asc" %}selected{% endif %}>
+            Price ↑
+        </option>
+
+        <option value="price_desc"
+            {% if selected_sort == "price_desc" %}selected{% endif %}>
+            Price ↓
+        </option>
     </select>
 
+    <!-- Apply filters -->
     <button type="submit">Apply</button>
 </form>
 
+
+<!-- ==================================================
+     PRODUCT GRID
+     ==================================================
+     Displays products in a card-based layout
+-->
 <div class="product-grid">
+
     {% for product in products %}
     <div class="product-card">
+
+        <!-- Product name -->
         <h3>{{ product.name }}</h3>
+
+        <!-- Product price (formatted to 2 decimals) -->
         <p>${{ "%.2f"|format(product.price) }}</p>
+
+        <!-- Product category -->
         <small>{{ product.category.name }}</small>
 
-        <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}">
-            <button>Add to CART</button>
+
+        <!-- -------------------------------
+             ADD TO CART FORM
+             -------------------------------
+             Sends POST request to cart blueprint
+        -->
+        <form method="POST"
+              action="{{ url_for('cart.add_to_cart', product_id=product.id) }}">
+            <button type="submit">Add to Cart</button>
         </form>
+
     </div>
     {% endfor %}
+
 </div>
 
+
+<!-- ==================================================
+     PAGINATION SECTION
+     ==================================================
+     Controls Previous / Next page navigation
+-->
 {% if total_pages > 0 %}
 <div class="pagination">
+
+    <!-- Previous page link -->
     {% if pagination.has_prev %}
-        <a href="{{ url_for('views.home',
+        <a href="{{ url_for(
+            'views.home',
             page=pagination.prev_num,
             category=selected_category,
-            sort=selected_sort) }}">
+            sort=selected_sort
+        ) }}">
             « Prev
         </a>
     {% endif %}
 
-    <span>Page {{ pagination.page }} of {{ total_pages }}</span>
+    <!-- Current page info -->
+    <span>
+        Page {{ pagination.page }} of {{ total_pages }}
+    </span>
 
+    <!-- Next page link -->
     {% if pagination.has_next %}
-        <a href="{{ url_for('views.home',
+        <a href="{{ url_for(
+            'views.home',
             page=pagination.next_num,
             category=selected_category,
-            sort=selected_sort) }}">
+            sort=selected_sort
+        ) }}">
             Next »
         </a>
     {% endif %}
+
 </div>
+
 {% else %}
-<p class="no-results">No products found for this category.</p>
+
+<!-- ==================================================
+     NO PRODUCTS FOUND MESSAGE
+     ================================================== -->
+<p class="no-results">
+    No products found for this category.
+</p>
+
 {% endif %}
 
 {% endblock %}

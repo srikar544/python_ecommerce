@@ -1,44 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!-- ==================================================
+         META INFORMATION
+         ==================================================
+         - UTF-8 character encoding
+         - Page title shown in browser tab
+    -->
     <meta charset="UTF-8">
     <title>E-Shop</title>
 
-    <!-- GLOBAL CSS -->
+
+    <!-- ==================================================
+         GLOBAL CSS
+         ==================================================
+         Base styles shared across all pages
+    -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 
+
+    <!-- ==================================================
+         EXTRA PAGE-SPECIFIC CSS
+         ==================================================
+         Child templates can inject their own CSS here
+         Example: home.css, cart.css
+    -->
     {% block extra_css %}{% endblock %}
+
 </head>
 <body>
 
+
+<!-- ==================================================
+     NAVIGATION BAR
+     ==================================================
+     Appears on all pages
+-->
 <nav class="navbar">
+
+    <!-- -------------------------------
+         LEFT SIDE: LOGO / HOME LINK
+         ------------------------------- -->
     <div class="nav-left">
-        <a href="{{ url_for('views.home') }}" class="logo">E-Shop</a>
+        <a href="{{ url_for('views.home') }}" class="logo">
+            E-Shop
+        </a>
     </div>
 
-    <div class="nav-right">
-        {% if current_user.is_authenticated %}
-            <span class="welcome">Hello, {{ current_user.first_name }}</span>
 
-            <a href="{{ url_for('cart.view_cart') }}" class="nav-link cart-link">
+    <!-- -------------------------------
+         RIGHT SIDE: USER ACTIONS
+         ------------------------------- -->
+    <div class="nav-right">
+
+        {% if current_user.is_authenticated %}
+
+            <!-- Welcome message -->
+            <span class="welcome">
+                Hello, {{ current_user.first_name }}
+            </span>
+
+
+            <!-- -------------------------------
+                 CART LINK WITH ITEM COUNT
+                 -------------------------------
+                 cart_count is injected using
+                 @app.context_processor
+            -->
+            <a href="{{ url_for('cart.view_cart') }}"
+               class="nav-link cart-link">
+
                 Cart
+
                 {% if cart_count > 0 %}
-                    <span class="cart-badge">{{ cart_count }}</span>
+                    <span class="cart-badge">
+                        {{ cart_count }}
+                    </span>
                 {% endif %}
+
             </a>
 
-            <a href="{{ url_for('auth.logout') }}" class="nav-link logout">Logout</a>
+
+            <!-- Logout link -->
+            <a href="{{ url_for('auth.logout') }}"
+               class="nav-link logout">
+                Logout
+            </a>
+
         {% else %}
-            <a href="{{ url_for('auth.login') }}" class="nav-link">Login</a>
-            <a href="{{ url_for('auth.sign_up') }}" class="nav-link">Sign Up</a>
+
+            <!-- Links for guests -->
+            <a href="{{ url_for('auth.login') }}"
+               class="nav-link">
+                Login
+            </a>
+
+            <a href="{{ url_for('auth.sign_up') }}"
+               class="nav-link">
+                Sign Up
+            </a>
+
         {% endif %}
+
     </div>
 </nav>
 
 
+<!-- ==================================================
+     MAIN CONTENT CONTAINER
+     ==================================================
+     Child templates inject page content here
+-->
 <div class="container">
     {% block content %}{% endblock %}
 </div>
+
 
 </body>
 </html>

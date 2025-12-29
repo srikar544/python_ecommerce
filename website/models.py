@@ -3,14 +3,16 @@ MODELS.PY
 =========
 This file defines all database models (tables) used in the application.
 
-Design goals:
-- Prevent duplicate carts
+DESIGN GOALS
+------------
 - One active cart per user
+- Prevent duplicate carts
 - One product per cart (quantity-based)
 - Clean cascading deletes
-- Scalable (Amazon / Flipkart style)
+- Scalable e-commerce design (Amazon / Flipkart style)
 
-Technology:
+TECHNOLOGY
+----------
 - Flask-SQLAlchemy ORM
 - MySQL backend
 """
@@ -21,28 +23,30 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 
-# --------------------------------------------------
+# ==================================================
 # USER MODEL
-# --------------------------------------------------
-# Represents a registered user
+# ==================================================
+# Represents a registered user of the application
 class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # One account per email
+    # Each user must have a unique email
     email = db.Column(db.String(150), unique=True, nullable=False)
 
-    # Hashed password
+    # Password is stored as a HASH, never plain text
     password = db.Column(db.String(255), nullable=False)
 
     first_name = db.Column(db.String(150))
 
+    # Automatically stores account creation time
     created_at = db.Column(
         db.DateTime(timezone=True),
         default=func.now()
     )
 
-    # One-to-One → User ↔ Cart
+    # One-to-One relationship
+    # One user → one active cart
     cart = db.relationship(
         "Cart",
         uselist=False,
@@ -53,15 +57,15 @@ class User(db.Model, UserMixin):
         return f"<User {self.email}>"
 
 
-# --------------------------------------------------
+# ==================================================
 # CATEGORY MODEL
-# --------------------------------------------------
-# Product categories (Electronics, Books, etc.)
+# ==================================================
+# Used to group products (Electronics, Books, Fashion, etc.)
 class Category(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # No duplicate category names
+    # Category names must be unique
     name = db.Column(db.String(100), unique=True, nullable=False)
 
     # One category → many products
@@ -74,10 +78,10 @@ class Category(db.Model):
         return f"<Category {self.name}>"
 
 
-# --------------------------------------------------
+# ==================================================
 # PRODUCT MODEL
-# --------------------------------------------------
-# Products available for purchase
+# ==================================================
+# Represents a product that can be purchased
 class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -86,10 +90,12 @@ class Product(db.Model):
 
     price = db.Column(db.Float, nullable=False)
 
+    # Available stock quantity
     stock = db.Column(db.Integer, nullable=False)
 
     description = db.Column(db.Text)
 
+    # Each product must belong to a category
     category_id = db.Column(
         db.Integer,
         db.ForeignKey("category.id"),
@@ -101,7 +107,10 @@ class Product(db.Model):
         default=func.now()
     )
 
-    # Same product name allowed in different categories
+    # Prevent duplicate product names within the same category
+    # Example:
+    # "iPhone" allowed in Electronics
+    # "iPhone" NOT allowed twice in Electronics
     __table_args__ = (
         db.UniqueConstraint(
             "name",
@@ -114,10 +123,10 @@ class Product(db.Model):
         return f"<Product {self.name}>"
 
 
-# --------------------------------------------------
+# ==================================================
 # CART MODEL
-# --------------------------------------------------
-# One active cart per user
+# ==================================================
+# Represents the user's active shopping cart
 class Cart(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -135,7 +144,8 @@ class Cart(db.Model):
         default=func.now()
     )
 
-    # Cart → many cart items
+    # One cart → many cart items
+    # cascade ensures cart items are deleted if cart is deleted
     items = db.relationship(
         "CartItem",
         backref="cart",
@@ -143,16 +153,21 @@ class Cart(db.Model):
     )
 
     def total_items(self):
+        """
+        Returns total quantity of all items in cart.
+        Used for cart badge (🛒 count).
+        """
         return sum(item.quantity for item in self.items)
 
     def __repr__(self):
         return f"<Cart {self.id} for User {self.user_id}>"
 
 
-# --------------------------------------------------
+# ==================================================
 # CART ITEM MODEL
-# --------------------------------------------------
-# One product per cart (quantity-based)
+# ==================================================
+# Represents a product inside a cart
+# Quantity-based (no duplicate products per cart)
 class CartItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -175,10 +190,11 @@ class CartItem(db.Model):
         default=1
     )
 
-    # Access product details directly
+    # Relationship to access product details
     product = db.relationship("Product")
 
-    # Prevent duplicate products in same cart
+    # Prevent duplicate products in the same cart
+    # Same product can appear only once per cart
     __table_args__ = (
         db.UniqueConstraint(
             "cart_id",
@@ -193,19 +209,70 @@ class CartItem(db.Model):
             f"Product {self.product_id} x {self.quantity}>"
         )
 
+
+# ==================================================
+# ORDER MODEL
+# ==================================================
+# Represents a completed purchase (checkout result)
 class Order(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Order belongs to a user
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id")
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    # Total price of the order
     total_amount = db.Column(db.Float)
 
-    items = db.relationship("OrderItem", backref="order", lazy=True)
+    # One order → many order items
+    items = db.relationship(
+        "OrderItem",
+        backref="order",
+        lazy=True
+    )
 
+    def __repr__(self):
+        return f"<Order {self.id} User {self.user_id}>"
+
+
+# ==================================================
+# ORDER ITEM MODEL
+# ==================================================
+# Represents a product inside an order
+# Stores snapshot of price at purchase time
 class OrderItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey("order.id"))
-    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
-    quantity = db.Column(db.Integer)
-    price = db.Column(db.Float)  # Price at the time of purchase
 
+    id = db.Column(db.Integer, primary_key=True)
+
+    order_id = db.Column(
+        db.Integer,
+        db.ForeignKey("order.id")
+    )
+
+    product_id = db.Column(
+        db.Integer,
+        db.ForeignKey("product.id")
+    )
+
+    quantity = db.Column(db.Integer)
+
+    # Price is stored separately to preserve history
+    # Even if product price changes later
+    price = db.Column(db.Float)
+
+    # Relationship to product for display
     product = db.relationship("Product")
+
+    def __repr__(self):
+        return (
+            f"<OrderItem {self.id} | "
+            f"Product {self.product_id} x {self.quantity}>"
+        )

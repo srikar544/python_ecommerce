@@ -1,41 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!-- ==================================================
+         META INFORMATION
+         ==================================================
+         - Character encoding
+         - Responsive layout for mobile devices
+    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- ==================================================
+         PAGE TITLE
+         ================================================== -->
     <title>Login</title>
-    <!-- Global CSS -->
+
+
+    <!-- ==================================================
+         GLOBAL STYLES
+         ==================================================
+         Common styles shared across all pages
+    -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <!-- Login page CSS -->
+
+
+    <!-- ==================================================
+         LOGIN PAGE STYLES
+         ==================================================
+         Styles specific to login/signup screens
+    -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
 </head>
 <body>
+
+
+    <!-- ==================================================
+         LOGIN CONTAINER
+         ==================================================
+         Centers and styles the login card
+    -->
     <div class="auth-container">
+
         <h1>Login</h1>
 
-        <!-- Flash messages -->
+
+        <!-- ==================================================
+             FLASH MESSAGES SECTION
+             ==================================================
+             Displays success / error messages from Flask
+             Example:
+             flash("Invalid credentials", "error")
+        -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             <div class="flash-messages">
               {% for category, message in messages %}
-                <div class="flash {{ category }}">{{ message }}</div>
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
               {% endfor %}
             </div>
           {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('auth.login') }}" autocomplete="off">
-            <!-- Fake hidden field to prevent browser autofill -->
-            <input type="text" name="fakeusernameremembered" style="display:none">
 
-            <input type="email" name="email" placeholder="Email" required autocomplete="new-email"><br>
-            <input type="password" name="password" placeholder="Password" required autocomplete="new-password"><br>
+        <!-- ==================================================
+             LOGIN FORM
+             ==================================================
+             - POST request to auth.login route
+             - autocomplete disabled for better UX/security
+        -->
+        <form method="POST"
+              action="{{ url_for('auth.login') }}"
+              autocomplete="off">
+
+            <!-- ----------------------------------------------
+                 FAKE INPUT FIELD
+                 ----------------------------------------------
+                 Prevents browser from auto-filling saved credentials
+            -->
+            <input type="text"
+                   name="fakeusernameremembered"
+                   style="display:none">
+
+
+            <!-- ----------------------------------------------
+                 EMAIL INPUT
+                 ---------------------------------------------- -->
+            <input type="email"
+                   name="email"
+                   placeholder="Email"
+                   required
+                   autocomplete="new-email"><br>
+
+
+            <!-- ----------------------------------------------
+                 PASSWORD INPUT
+                 ---------------------------------------------- -->
+            <input type="password"
+                   name="password"
+                   placeholder="Password"
+                   required
+                   autocomplete="new-password"><br>
+
+
+            <!-- ----------------------------------------------
+                 SUBMIT BUTTON
+                 ---------------------------------------------- -->
             <button type="submit">Login</button>
         </form>
 
+
+        <!-- ==================================================
+             REDIRECT TO SIGNUP
+             ================================================== -->
         <p class="redirect-text">
-            Don't have an account? <a href="{{ url_for('auth.sign_up') }}">Sign Up here</a>
+            Don't have an account?
+            <a href="{{ url_for('auth.sign_up') }}">
+                Sign Up here
+            </a>
         </p>
+
     </div>
+
 </body>
 </html>

@@ -1,57 +1,147 @@
 {% extends "base.html" %}
 
+{# ==================================================
+   EXTRA CSS FOR CART PAGE
+   ==================================================
+   Loads styles specific to the cart layout
+#}
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
 {% endblock %}
 
+
 {% block content %}
+
+<!-- ==================================================
+     CART PAGE TITLE
+     ================================================== -->
 <h1>Your Cart</h1>
 
+
+<!-- ==================================================
+     CART ITEMS TABLE
+     ==================================================
+     Shows all products currently in the user's cart
+-->
 {% if items %}
+
 <table>
+
+    <!-- -------------------------------
+         TABLE HEADER
+         ------------------------------- -->
     <tr>
         <th>Product</th>
         <th>Qty</th>
         <th>Price</th>
         <th>Total</th>
-        <th></th>
+        <th colspan="2">Actions</th>
     </tr>
+
+
+    <!-- -------------------------------
+         CART ITEMS LOOP
+         ------------------------------- -->
     {% for item in items %}
     <tr>
+
+        <!-- Product name -->
         <td>{{ item.product.name }}</td>
+
+        <!-- Current quantity -->
         <td>{{ item.quantity }}</td>
-        <td>${{ "%.2f"|format(item.product.price) }}</td>
-        <td>${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+
+        <!-- Price per unit -->
         <td>
-            <form method="post" action="{{ url_for('cart.remove_from_cart', item_id=item.id) }}">
-                <button>Remove</button>
+            ${{ "%.2f"|format(item.product.price) }}
+        </td>
+
+        <!-- Item total -->
+        <td>
+            ${{ "%.2f"|format(item.product.price * item.quantity) }}
+        </td>
+
+
+        <!-- -------------------------------
+             REMOVE ITEM BUTTON
+             ------------------------------- -->
+        <td>
+            <form method="POST"
+                  action="{{ url_for('cart.remove_from_cart', item_id=item.id) }}">
+                <button type="submit">Remove</button>
             </form>
         </td>
+
+
+        <!-- -------------------------------
+             QUANTITY CONTROLS
+             -------------------------------
+             - Decrease quantity
+             - Increase quantity
+        -->
         <td>
-        <form action="{{ url_for('cart.decrease_quantity', item_id=item.id) }}" method="post" style="display:inline;">
-        <button type="submit">−</button>
-        </form>
-        {{ item.quantity }}
-        <form action="{{ url_for('cart.increase_quantity', item_id=item.id) }}" method="post" style="display:inline;">
-        <button type="submit">+</button>
-         
-    </form>
-</td>
+
+            <!-- Decrease quantity -->
+            <form method="POST"
+                  action="{{ url_for('cart.decrease_quantity', item_id=item.id) }}"
+                  style="display:inline;">
+                <button type="submit">−</button>
+            </form>
+
+            <!-- Current quantity -->
+            <strong>{{ item.quantity }}</strong>
+
+            <!-- Increase quantity -->
+            <form method="POST"
+                  action="{{ url_for('cart.increase_quantity', item_id=item.id) }}"
+                  style="display:inline;">
+                <button type="submit">+</button>
+            </form>
+
+        </td>
+
     </tr>
     {% endfor %}
-     <tr>
-            <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
-            <td colspan="2"><strong>${{ "%.2f"|format(total) }}</strong></td>
-        </tr>
+
+
+    <!-- -------------------------------
+         GRAND TOTAL ROW
+         ------------------------------- -->
+    <tr>
+        <td colspan="3" style="text-align:right;">
+            <strong>Grand Total:</strong>
+        </td>
+        <td colspan="2">
+            <strong>
+                ${{ "%.2f"|format(total) }}
+            </strong>
+        </td>
+    </tr>
+
 </table>
-<!-- Checkout button -->
+
+
+<!-- ==================================================
+     CHECKOUT BUTTON
+     ==================================================
+     Redirects user to checkout page
+-->
 <div style="text-align:center; margin-top:20px;">
     <a href="{{ url_for('cart.checkout') }}">
-        <button style="padding:10px 20px; font-size:16px;">Proceed to Checkout</button>
+        <button style="padding:10px 20px; font-size:16px;">
+            Proceed to Checkout
+        </button>
     </a>
 </div>
 
+
 {% else %}
+
+<!-- ==================================================
+     EMPTY CART MESSAGE
+     ================================================== -->
 <p>Your cart is empty</p>
+
 {% endif %}
+
 {% endblock %}

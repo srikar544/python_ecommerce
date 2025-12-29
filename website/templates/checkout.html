@@ -1,10 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- ==================================================
+     CHECKOUT PAGE TITLE
+     ================================================== -->
 <h1>Checkout</h1>
 
+
+<!-- ==================================================
+     CART ITEMS TABLE
+     ==================================================
+     Displays all items before placing the order
+-->
 {% if items %}
+
 <table>
+
+    <!-- -------------------------------
+         TABLE HEADER
+         ------------------------------- -->
     <thead>
         <tr>
             <th>Product</th>
@@ -13,29 +28,80 @@
             <th>Total</th>
         </tr>
     </thead>
+
+
+    <!-- -------------------------------
+         TABLE BODY
+         -------------------------------
+         Loops through cart items
+         Calculates running grand total
+    -->
     <tbody>
+
+        {# Initialize grand total variable #}
         {% set grand_total = 0 %}
+
         {% for item in items %}
         <tr>
+
+            <!-- Product name -->
             <td>{{ item.product.name }}</td>
+
+            <!-- Quantity ordered -->
             <td>{{ item.quantity }}</td>
-            <td>${{ "%.2f"|format(item.product.price) }}</td>
-            <td>${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+
+            <!-- Price per unit -->
+            <td>
+                ${{ "%.2f"|format(item.product.price) }}
+            </td>
+
+            <!-- Item total (price × quantity) -->
+            <td>
+                ${{ "%.2f"|format(item.product.price * item.quantity) }}
+            </td>
+
         </tr>
+
+        {# Accumulate total cost #}
         {% set grand_total = grand_total + (item.product.price * item.quantity) %}
         {% endfor %}
+
+
+        <!-- -------------------------------
+             GRAND TOTAL ROW
+             ------------------------------- -->
         <tr>
-            <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
-            <td><strong>${{ "%.2f"|format(grand_total) }}</strong></td>
+            <td colspan="3" style="text-align:right;">
+                <strong>Grand Total:</strong>
+            </td>
+            <td>
+                <strong>
+                    ${{ "%.2f"|format(grand_total) }}
+                </strong>
+            </td>
         </tr>
+
     </tbody>
 </table>
 
+
+<!-- ==================================================
+     PLACE ORDER FORM
+     ==================================================
+     Submits POST request to checkout route
+-->
 <form method="POST">
     <button type="submit">Place Order</button>
 </form>
 
+
 {% else %}
+
+<!-- ==================================================
+     EMPTY CART MESSAGE
+     ================================================== -->
 <p>Your cart is empty.</p>
+
 {% endif %}
+
 {% endblock %}
