@@ -68,14 +68,6 @@ User
 ##  Project Structure
 
 
----
-
-## 🔥 Pro Tip (Best Practice)
-
-If GitHub **still** breaks it, use this instead (100% safe):
-
-```md
-<pre>
 project/
 │
 ├── app/
