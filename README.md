@@ -55,12 +55,14 @@ User
  **Tech Stack used or this project**
 
 | Layer     | Technology              |
+|-----------|--------------------------|
 | Backend   | Flask                   |
 | ORM       | Flask-SQLAlchemy        |
 | Database  | MySQL                   |
 | Auth      | Flask-Login             |
 | Templates | Jinja2                  |
 | Styling   | HTML / CSS (extendable) |
+
 
 **Project Structure**
 
