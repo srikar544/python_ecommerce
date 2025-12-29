@@ -171,7 +171,7 @@ project/
   order is a reserved keyword → always use backticks:
 
   **Output:**
-
+   Run python run.py from your root project
    <img width="1012" height="437" alt="image" src="https://github.com/user-attachments/assets/93ce0964-c471-4961-a5f7-c4f592482b87" />
 
    <img width="1894" height="915" alt="image" src="https://github.com/user-attachments/assets/29d75f10-3d0b-4a0a-b101-9159b4d569aa" />
