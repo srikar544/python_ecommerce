@@ -36,6 +36,8 @@ Supports user authentication, cart management, checkout, and order history — d
   
 **Architecture**   
 
+##  Entity Relationship Overview
+
 User
  ├── Cart (1:1)
  │    └── CartItem (1:N)
@@ -44,6 +46,7 @@ User
  └── Order (1:N)
       └── OrderItem (1:N)
            └── Product
+
 
   **DB Design**
  
