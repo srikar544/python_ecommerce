@@ -189,10 +189,15 @@ project/
    
    <img width="1886" height="845" alt="image" src="https://github.com/user-attachments/assets/dc7f25bd-476a-49b9-97f4-225a799645d9" />
 
+   **Click on Proceed to Checkout**
+   
    <img width="1781" height="783" alt="image" src="https://github.com/user-attachments/assets/40defb26-4be9-41b7-9a03-112a796d4456" />
+
+   **Click on Place Order**
 
    <img width="1000" height="633" alt="image" src="https://github.com/user-attachments/assets/f67f3685-2bb0-4c98-afe6-2ed484884af8" />
 
+  **All Previous orders are shown**
   <img width="1655" height="1013" alt="image" src="https://github.com/user-attachments/assets/86e72344-49e5-42d4-b136-dc07f4c46001" />
 
 
