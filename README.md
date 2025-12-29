@@ -64,8 +64,10 @@ User
 | Styling   | HTML / CSS (extendable) |
 
 
-**Project Structure**
 
+##  Project Structure
+
+```text
 project/
 │
 ├── app/
@@ -86,6 +88,7 @@ project/
 ├── requirements.txt
 ├── run.py
 └── README.md
+
 
 
 **Database Models**
