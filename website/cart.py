@@ -195,57 +195,68 @@ def decrease_quantity(item_id):
 # ==================================================
 # CHECKOUT
 # ==================================================
+from sqlalchemy.orm import joinedload
+from flask import flash, redirect, render_template, url_for, request
+from flask_login import current_user, login_required
+from .models import Cart, CartItem, Order, OrderItem
+from . import db
+from .cart import cart_bp
+
 @cart_bp.route("/checkout", methods=["GET", "POST"])
 @login_required
 def checkout():
     """
-    Convert cart items into an order.
+    Handles checkout process:
+    - Displays cart items and grand total (GET)
+    - Converts cart items into an order (POST)
     """
 
-    cart = Cart.query.filter_by(user_id=current_user.id).first()
+    # Load the current user's cart and its items with product details
+    cart = Cart.query.options(
+        joinedload(Cart.items).joinedload(CartItem.product)
+    ).filter_by(user_id=current_user.id).first()
 
-    # Prevent checkout if cart is empty
+    # If cart is empty, redirect to home
     if not cart or not cart.items:
         flash("Your cart is empty", "info")
         return redirect(url_for("views.home"))
 
     if request.method == "POST":
-
-        # Calculate order total
-        total = sum(
-            item.quantity * item.product.price
-            for item in cart.items
-        )
-
-        # Create a new order
-        order = Order(
-            user_id=current_user.id,
-            total_amount=total
-        )
+        # Create order for the user
+        order = Order(user_id=current_user.id)
         db.session.add(order)
-        db.session.flush()  # Assign order.id
+        db.session.flush()  # Assign order.id before adding items
 
-        # Move cart items to order items
+        total_amount = 0  # accumulator for order total
+
+        # Move cart items into order items
         for item in cart.items:
             order_item = OrderItem(
                 order_id=order.id,
                 product_id=item.product.id,
                 quantity=item.quantity,
-                price=item.product.price
+                price=item.product.price  # snapshot of price at purchase
             )
             db.session.add(order_item)
 
-            # Remove item from cart after ordering
+            # Add to total
+            total_amount += item.quantity * item.product.price
+
+            # Remove from cart
             db.session.delete(item)
 
+        # Assign total_amount to the order
+        order.total_amount = total_amount
+
+        # Commit all changes
         db.session.commit()
 
-        flash("Order placed successfully!", "success")
-        return redirect(url_for("views.home"))
+        flash("Your order has been placed successfully!", "success")
+        return redirect(url_for("orders.order_history"))
 
-    # GET request → show checkout page
-    return render_template("checkout.html", items=cart.items)
-
+    # GET request: render checkout template
+    grand_total = sum(item.quantity * item.product.price for item in cart.items)
+    return render_template("checkout.html", items=cart.items, grand_total=grand_total)
 
 # ==================================================
 # ORDER HISTORY BLUEPRINT

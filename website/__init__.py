@@ -9,6 +9,7 @@ from flask_login import LoginManager, current_user
 
 # Used to safely encode special characters in the database password
 from urllib.parse import quote_plus
+ 
 
 
 # --------------------------------------------------
@@ -70,10 +71,12 @@ def create_app():
     from .views import views     # main website routes
     from .auth import auth       # authentication routes
     from .cart import cart_bp    # shopping cart routes
+    from .cart import orders_bp
 
     app.register_blueprint(views)
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(cart_bp)
+    app.register_blueprint(orders_bp, url_prefix="/orders")
 
 
     # --------------------------------------------------

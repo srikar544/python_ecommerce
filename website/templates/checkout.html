@@ -7,19 +7,19 @@
      ================================================== -->
 <h1>Checkout</h1>
 
+<!-- ==================================================
+     CHECK IF CART HAS ITEMS
+     ================================================== -->
+{% if items %}
 
 <!-- ==================================================
      CART ITEMS TABLE
      ==================================================
-     Displays all items before placing the order
+     Displays all products in the cart with quantity,
+     individual price, and total price per item.
 -->
-{% if items %}
-
 <table>
-
-    <!-- -------------------------------
-         TABLE HEADER
-         ------------------------------- -->
+    <!-- Table header -->
     <thead>
         <tr>
             <th>Product</th>
@@ -29,71 +29,51 @@
         </tr>
     </thead>
 
-
-    <!-- -------------------------------
-         TABLE BODY
-         -------------------------------
-         Loops through cart items
-         Calculates running grand total
-    -->
+    <!-- Table body -->
     <tbody>
-
-        {# Initialize grand total variable #}
-        {% set grand_total = 0 %}
-
         {% for item in items %}
         <tr>
-
             <!-- Product name -->
             <td>{{ item.product.name }}</td>
 
             <!-- Quantity ordered -->
             <td>{{ item.quantity }}</td>
 
-            <!-- Price per unit -->
-            <td>
-                ${{ "%.2f"|format(item.product.price) }}
-            </td>
+            <!-- Price per unit formatted to 2 decimals -->
+            <td>${{ "%.2f"|format(item.product.price) }}</td>
 
-            <!-- Item total (price × quantity) -->
-            <td>
-                ${{ "%.2f"|format(item.product.price * item.quantity) }}
-            </td>
-
+            <!-- Total price for this item (price × quantity) -->
+            <td>${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
         </tr>
-
-        {# Accumulate total cost #}
-        {% set grand_total = grand_total + (item.product.price * item.quantity) %}
         {% endfor %}
 
-
-        <!-- -------------------------------
+        <!-- ==================================================
              GRAND TOTAL ROW
-             ------------------------------- -->
+             ==================================================
+             Displays the total cost of all items in the cart.
+        -->
         <tr>
             <td colspan="3" style="text-align:right;">
                 <strong>Grand Total:</strong>
             </td>
             <td>
-                <strong>
-                    ${{ "%.2f"|format(grand_total) }}
-                </strong>
+                <strong>${{ "%.2f"|format(grand_total) }}</strong>
             </td>
         </tr>
-
     </tbody>
 </table>
-
 
 <!-- ==================================================
      PLACE ORDER FORM
      ==================================================
-     Submits POST request to checkout route
+     Submits POST request to checkout route.
+     The button is disabled if grand total is 0.
 -->
 <form method="POST">
-    <button type="submit">Place Order</button>
+    <button type="submit" {% if grand_total == 0 %}disabled{% endif %}>
+        Place Order
+    </button>
 </form>
-
 
 {% else %}
 
