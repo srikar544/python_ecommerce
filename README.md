@@ -68,6 +68,13 @@ User
 ##  Project Structure
 
 
+
+---
+
+ 
+
+ 
+<pre>
 project/
 │
 ├── app/
@@ -89,6 +96,7 @@ project/
 ├── run.py
 └── README.md
 </pre>
+
 
 
 **Database Models**
