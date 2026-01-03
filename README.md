@@ -127,31 +127,25 @@ project/
 
  **Installation and Setup**   
 
-  Step-1) Clone the Repository.
-  
-  Clone the Project from https://github.com/srikar544/python_ecommerce.git
-  cd flask-ecommerce
-  
-  Step-2) Create Virtual Environment
-  
-  venv\Scripts\activate from the visual studio
-  
-  Step-3) Install Dependencies
-  pip install -r requirements.txt
-  
-  Step-4)Configure the Database
+ - Clone the Repository.
+   - Clone the Project from https://github.com/srikar544/python_ecommerce.git
+   - cd flask-ecommerce
+ - Create Virtual Environment
+    -  venv\Scripts\activate from the visual studio
+ - Install Dependencies
+     - pip install -r requirements.txt
+ -Configure the Database
   app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://user:password@localhost/ecommerce" - Need to use your own database 
-
-  Step-5)Create Database tables 
+ -Create Database tables 
 
   flask db init
   flask db migrate
   flask db upgrade
 
-  Step-6)Run the Application
+ -Run the Application
   python run.py
-
-  Step-7) Visit and do the operations
+ 
+ - Visit and do the operations
 
   http://127.0.0.1:5000
 
