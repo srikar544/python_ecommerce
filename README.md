@@ -150,6 +150,13 @@ project/
 
  -Run the Application
    -python run.py
+
+ -Run the seed_all.py class with this command so that all tables are created prior
+   - python -m seeds.seed_all
+
+   <img width="1023" height="372" alt="image" src="https://github.com/user-attachments/assets/7dc0d0aa-8fe6-44af-9ee5-a2409ef7101a" />
+
+
  
  - Visit and do the operations
    - http://127.0.0.1:5000
