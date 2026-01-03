@@ -243,4 +243,132 @@ project/
   <img width="427" height="345" alt="image" src="https://github.com/user-attachments/assets/1e3fe84f-e093-425a-ac86-118439a14aad" />
 
 
+**What each .py file does**
 
+    - User Authentication
+      -Login (/login):
+        - User submits email/password.
+        - Query User table for matching email.
+        - Check hashed password.
+        - Call login_user(user) → stores user_id in session → current_user becomes the logged-in user.
+        - Redirect to home page.
+
+     - Sign-up (/sign-up):
+        - Create new User object, hash password, save in DB.
+        - login_user(user) → automatically logs in new user.
+     
+     - Logout (/logout):
+       - Calls logout_user() → clears session → current_user becomes anonymous.
+
+ - Effect on cart_count:
+ - Only logged-in users have a cart. So inject_cart_count() returns a number > 0 only for authenticated users.
+
+   - Models (models.py)
+     - User → Cart → CartItem relationships:
+        - Each User has one Cart (cart = db.relationship(uselist=False)).
+        - Each Cart has many CartItems.
+        - Each CartItem references one Product.
+     - Cart.total_items() sums quantities across all items → used for cart_count.
+     - Order → OrderItem: after checkout, cart items become order items.
+
+     - Home Page (views.py)
+
+         - / route shows products:
+          - Can filter by category (?category=1) and sort by price/name.
+          - Paginates results (per_page=6).
+          - Passes products, categories, pagination info to home.html.
+        - CSS: home.css for product grid, product cards, flash messages.
+
+     - Cart Routes (cart.py)
+       - /cart → shows all items in the logged-in user’s cart:
+       - Query CartItem with joinedload for products.
+       - Calculate total price.
+       - Pass items and total to cart.html.
+
+      - /add-to-cart/<product_id>:
+        - Fetch product.
+        - Get or create Cart for current_user.
+        - Check if item exists in cart:
+          - If yes → increment quantity.
+          - If no → create new CartItem.
+      - Commit to DB.
+      - Flash message → redirects to cart page.
+      - /remove-from-cart/<item_id> → removes an item.
+      - /cart/increase and /cart/decrease → updates quantities.
+      - /checkout:
+        - Uses Order and OrderItem to create a new order from cart items.
+        - Deletes cart items afterward.
+
+      - Order History (orders_bp)
+        - /orders → shows previous orders for logged-in user.
+        - Queries Order table and passes to orders.html.
+
+     - Service Layer (Optional for Logic)
+       - OrderService:
+         - calculate_cart_total(cart) → sum total price.
+         - checkout_cart(cart) → reduce stock, clear cart.
+        - PaymentService → dummy payment processing.
+        - ProductService → fetch/create products, filter by category.
+
+     - Effect: Your routes can call these services instead of repeating business logic.  
+
+Effect: Your routes can call these services instead of repeating business logic.
+
+- HTML Templates & CSS
+
+  - Navbar shows cart_count badge if cart_count > 0.
+  - CSS files:
+    - base.css → global styles (navbar, cart badge, container)
+    - cart.css → cart table and buttons
+    - home.css → product grid
+    - login.css → auth pages
+
+- Flow:
+  - Flask route queries DB → prepares data.
+  - Context processor injects cart_count.
+  - Template renders HTML → inserts dynamic data.
+  - Browser applies CSS → final UI with styled navbar, product cards, and badges.
+
+  - Full Data Flow Example
+
+    - User adds a product to cart:
+       - User clicks Add to Cart → POST /add-to-cart/<product_id>
+       - cart.py route:
+           - Checks if current_user has a cart.
+           - Adds product to cart.
+           - Commits to DB.
+       - Redirects to /cart.
+       - Navbar calls inject_cart_count():
+          - Queries user's cart.
+          - Calls total_items() → returns sum of quantities.
+       - Template displays <span class="cart-badge">{{ cart_count }}</span>.
+       - CSS positions badge on top-right of cart link.
+
+
+    - Key TakeAways 
+
+        - cart_count is not stored in session, it's computed dynamically from the Cart table via context processor.
+        - Cart → CartItems → Product relationship is the core.
+        - All dynamic updates (add/remove/increase/decrease) automatically update the badge.
+        - Services decouple business logic (totals, stock updates) from routes.
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+Queries user's cart.
+
+Calls total_items() → returns sum of quantities.
+
+Template displays <span class="cart-badge">{{ cart_count }}</span>.
+
+CSS positions badge on top-right of cart link.
