@@ -13,7 +13,7 @@
 | Templates | Jinja2                  |
 | Styling   | HTML / CSS (extendable) |
 
-The Project supports below features 
+**The Project supports below features **
 
 - User authentication
 - Product catalog management
@@ -21,7 +21,7 @@ The Project supports below features
 - Checkout
 - Persistent order history
  
-Key Highlights of this Project
+**Key Highlights of this Project**
 
 - Modular, scalable backend architecture
 - Industry-style database modeling (User → Cart → Order)
@@ -110,7 +110,7 @@ project/
 
 **Database Models**
 
- **Core Models**
+ **Core Models** (These are the database tables in the project)
       1.User
       2.Category
       3.Product
@@ -120,10 +120,10 @@ project/
       7.OrderItem
 
  **Important Constraints**
-    User->Cart(One-to-One)
-    Unique Product Per Cart
-    Stored Price per order Item
-    Foreign Key constraints with referential integrity
+    - User->Cart(One-to-One)
+    - Unique Product Per Cart
+    - Stored Price per order Item
+    - Foreign Key constraints with referential integrity
 
  **Installation and Setup**   
 
