@@ -111,13 +111,13 @@ project/
 **Database Models**
 
  **Core Models** (These are the database tables in the project)
-       -User
-       -Category
-       -Product
-       -Cart
-       -CartItem
-       -Order
-       -OrderItem
+       - User
+       - Category
+       - Product
+       - Cart
+       - CartItem
+       - Order
+       - OrderItem
 
  **Important Constraints**
     - User->Cart(One-to-One)
