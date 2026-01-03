@@ -2,6 +2,17 @@
 
 **This Project is  production-style, scalable e-commerce backend built with Python and Flask. This project demonstrates real-world backend engineering practices including clean architecture, ORM-based data modeling, authentication, cart & order workflows, and extensibility for future business needs.**
 
+ **Tech Stack used or this project**
+
+| Layer     | Technology              |
+|-----------|--------------------------|
+| Backend   | Flask                   |
+| ORM       | Flask-SQLAlchemy        |
+| Database  | MySQL                   |
+| Auth      | Flask-Login             |
+| Templates | Jinja2                  |
+| Styling   | HTML / CSS (extendable) |
+
 The Project supports below features 
 
 - User authentication
@@ -67,33 +78,13 @@ User
 
   **DB Design**
  
- *One Cart Per User
- *Price Snapshot in OrderItem
- *Cascading Deletes for cart cleanup
- *ORM-level relationships, not raw sql
-
- **Tech Stack used or this project**
-
-| Layer     | Technology              |
-|-----------|--------------------------|
-| Backend   | Flask                   |
-| ORM       | Flask-SQLAlchemy        |
-| Database  | MySQL                   |
-| Auth      | Flask-Login             |
-| Templates | Jinja2                  |
-| Styling   | HTML / CSS (extendable) |
-
-
+ - One Cart Per User
+ - Price Snapshot in OrderItem
+ - Cascading Deletes for cart cleanup
+ - ORM-level relationships, not raw sql
 
 ##  Project Structure
 
-
-
----
-
- 
-
- 
 <pre>
 project/
 │
