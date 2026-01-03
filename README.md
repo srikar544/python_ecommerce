@@ -68,12 +68,13 @@
 
 User
 ├── Cart (1:1)
-│ └── CartItem (1:N)
-│ └── Product
+│   └── CartItem (1:N)
+│       └── Product
 │
 └── Order (1:N)
-└── OrderItem (1:N)
-└── Product
+    └── OrderItem (1:N)
+        └── Product
+
 
   **DB Design**
  
@@ -110,13 +111,13 @@ project/
 **Database Models**
 
  **Core Models** (These are the database tables in the project)
-      1.User
-      2.Category
-      3.Product
-      4.Cart
-      5.CartItem
-      6.Order
-      7.OrderItem
+       -User
+       -Category
+       -Product
+       -Cart
+       -CartItem
+       -Order
+       -OrderItem
 
  **Important Constraints**
     - User->Cart(One-to-One)
