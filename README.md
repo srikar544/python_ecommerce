@@ -365,10 +365,4 @@ Effect: Your routes can call these services instead of repeating business logic.
 
 
 
-Queries user's cart.
 
-Calls total_items() → returns sum of quantities.
-
-Template displays <span class="cart-badge">{{ cart_count }}</span>.
-
-CSS positions badge on top-right of cart link.
