@@ -2,46 +2,54 @@
 
 **This Project is  production-style, scalable e-commerce backend built with Python and Flask. This project demonstrates real-world backend engineering practices including clean architecture, ORM-based data modeling, authentication, cart & order workflows, and extensibility for future business needs.**
 
-The system supports user authentication, product catalog management, cart operations, checkout, and persistent order history, closely mirroring how real e-commerce platforms are designed.
-Key Highlights
+The Project supports below features 
 
-Modular, scalable backend architecture
-Industry‑style database modeling (User → Cart → Order)
-ORM‑based data access (no raw SQL coupling)
-Authentication‑ready design
-Clean separation of concerns
-Easy to extend for payments, shipping, and admin dashboards
+- User authentication
+- Product catalog management
+- Cart operations
+- Checkout
+- Persistent order history
+ 
+Key Highlights of this Project
+
+- Modular, scalable backend architecture
+- Industry-style database modeling (User → Cart → Order)
+- ORM-based data access (no raw SQL coupling)
+- Authentication-ready design
+- Clean separation of concerns
+- Easy to extend for payments, shipping, and admin dashboards
 
 **Features of this Application:**
 
 **Authentication:**
-   *User Registration and Login.
-   *Secure Password Hashing
-   *Session Management using Flask-Login
+   - User Registration and Login.
+   - Secure Password Hashing
+   - Session Management using Flask-Login
 
 **Product and Category Management:**
-  *Categories(Electronics, Fashion etc)
-  *Products with price,stock and description
-  *stock validation while adding to the Cart
+   - Categories(Electronics, Fashion etc)
+   - Products with price,stock and description
+   - stock validation while adding to the Cart
 
 **Cart System**
-  * One active Cart per User
-  * Quantity based Cart Items
-  * Increase/Decrease quantity
-  * Prevents duplicate products in Cart
+
+  - One active Cart per User
+  - Quantity based Cart Items
+  - Increase/Decrease quantity
+  - Prevents duplicate products in Cart
 
 **Checkout and Orders**
 
- *Checkout Page with Grand Total
- *Convert Cart -> Order
- *Price Snaphot stored and purchase time
- *Order History with itemized totals
+ - Checkout Page with Grand Total
+ - Convert Cart -> Order
+ - Price Snaphot stored and purchase time
+ - Order History with itemized totals
 
 **OrderHistory**
 
-  *View All Past Orders
-  *Accurate Order Totals
-  *Clean Tabular UI
+  - View All Past Orders
+  - Accurate Order Totals
+  - Clean Tabular UI
   
 **Architecture**   
 
