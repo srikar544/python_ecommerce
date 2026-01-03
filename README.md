@@ -144,14 +144,14 @@ project/
   app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://user:password@localhost/ecommerce" - Need to use your own database 
  -Create Database tables 
 
-  -flask db init
-  -flask db migrate
-  -flask db upgrade
+  - flask db init
+  - flask db migrate
+  - flask db upgrade
 
- -Run the Application
-   -python run.py
+ - Run the Application
+   - python run.py
 
- -Run the seed_all.py class with this command so that all tables are created prior
+ - Run the seed_all.py class with this command so that all tables are created prior
    - python -m seeds.seed_all
 
    <img width="1023" height="372" alt="image" src="https://github.com/user-attachments/assets/7dc0d0aa-8fe6-44af-9ee5-a2409ef7101a" />
