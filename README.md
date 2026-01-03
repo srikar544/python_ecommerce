@@ -157,24 +157,24 @@ project/
 
   **Application flow**
 
-  1.User adds products to cart
-  2.Cart calculates grand total
-  3.Checkout creates:
-     3.1 Order
-     3.2 OrderItem (with price snapshot)
-  4.Cart is cleared
-  5.User redirected to Order History
+  - User adds products to cart 
+  - Cart calculates grand total
+  - Checkout creates:
+     - Order
+     - OrderItem (with price snapshot)
+  - Cart is cleared
+  - User redirected to Order History
 
   **Sample Queries**
 
-  SELECT * FROM user;
-  SELECT * FROM product;
-  SELECT * FROM cart;
-  SELECT * FROM cart_item;
-  SELECT * FROM `order`;
-  SELECT * FROM order_item;
+  - SELECT * FROM user;
+  - SELECT * FROM product;
+  - SELECT * FROM cart;
+  - SELECT * FROM cart_item;
+  - SELECT * FROM `order`;
+  - SELECT * FROM order_item;
 
-  order is a reserved keyword → always use backticks:
+  - order is a reserved keyword → always use backticks:
 
   **Output:**
    **Run python run.py from your root project**
