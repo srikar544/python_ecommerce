@@ -64,17 +64,16 @@
   
 **Architecture**   
 
-##  Entity Relationship Overview
+## Entity Relationship Overview
 
 User
- ├── Cart (1:1)
- │    └── CartItem (1:N)
- │         └── Product
- │
- └── Order (1:N)
-      └── OrderItem (1:N)
-           └── Product
-
+├── Cart (1:1)
+│ └── CartItem (1:N)
+│ └── Product
+│
+└── Order (1:N)
+└── OrderItem (1:N)
+└── Product
 
   **DB Design**
  
@@ -138,16 +137,15 @@ project/
   app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://user:password@localhost/ecommerce" - Need to use your own database 
  -Create Database tables 
 
-  flask db init
-  flask db migrate
-  flask db upgrade
+  -flask db init
+  -flask db migrate
+  -flask db upgrade
 
  -Run the Application
-  python run.py
+   -python run.py
  
  - Visit and do the operations
-
-  http://127.0.0.1:5000
+   - http://127.0.0.1:5000
 
   **Application flow**
 
