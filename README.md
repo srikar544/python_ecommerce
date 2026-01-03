@@ -13,7 +13,7 @@
 | Templates | Jinja2                  |
 | Styling   | HTML / CSS (extendable) |
 
-**The Project supports below features **
+**The Project supports below features** 
 
 - User authentication
 - Product catalog management
