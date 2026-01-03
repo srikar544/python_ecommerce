@@ -110,20 +110,24 @@ project/
 
 **Database Models**
 
- **Core Models** (These are the database tables in the project)
-       - User
-       - Category
-       - Product
-       - Cart
-       - CartItem
-       - Order
-       - OrderItem
+**Core Models** (These are the database tables in the project)
 
- **Important Constraints**
-    - User->Cart(One-to-One)
-    - Unique Product Per Cart
-    - Stored Price per order Item
-    - Foreign Key constraints with referential integrity
+- User
+- Category
+- Product
+- Cart
+- CartItem
+- Order
+- OrderItem
+
+**Important Constraints**
+
+- User → Cart (One-to-One)
+  - Enforces single active cart per user
+- Unique Product Per Cart
+- Stored Price per OrderItem
+- Foreign Key constraints with referential integrity
+
 
  **Installation and Setup**   
 
