@@ -66,6 +66,7 @@
 
 ## Entity Relationship Overview
 
+<pre>
 User
 ├── Cart (1:1)
 │   └── CartItem (1:N)
@@ -74,6 +75,7 @@ User
 └── Order (1:N)
     └── OrderItem (1:N)
         └── Product
+</pre>
 
 
   **DB Design**
