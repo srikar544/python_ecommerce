@@ -276,3 +276,33 @@ class OrderItem(db.Model):
             f"<OrderItem {self.id} | "
             f"Product {self.product_id} x {self.quantity}>"
         )
+
+
+class Payment(db.Model):
+    """
+    Simulates a payment/transaction record for testing purposes.
+    Each record represents a payment made by a user.
+    """
+    
+    # Primary key for the Payment table
+    id = db.Column(db.Integer, primary_key=True)
+    
+    # Reference to the user who made the payment
+    # This creates a foreign key relationship with the 'user' table
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    
+    # Amount paid by the user
+    amount = db.Column(db.Float, nullable=False)
+    
+    # Status of the payment (e.g., SUCCESS, FAILED)
+    # Default is "SUCCESS" for testing purposes
+    status = db.Column(db.String(20), nullable=False, default="SUCCESS")
+    
+    # Timestamp when the payment was created
+    # Default is current UTC time
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship property to easily access the user object from a payment
+    # E.g., payment.user will give the User instance
+    # 'backref="payments"' allows User.payments to return all payments for that user
+    user = db.relationship("User", backref="payments")

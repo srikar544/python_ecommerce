@@ -9,6 +9,7 @@ from flask import Blueprint, render_template, request
 
 # Database models
 from .models import Product, Category
+from . import cache
 
 
 # ==================================================
@@ -22,6 +23,7 @@ views = Blueprint("views", __name__)
 # HOME PAGE / PRODUCT LISTING
 # ==================================================
 @views.route("/")
+@cache.cached(timeout=60)
 def home():
     """
     Home page that displays products with:
