@@ -141,16 +141,15 @@ def decrease_quantity(item_id: int):
 def checkout():
     """
     Handles checkout process:
-    - Displays cart items and grand total (GET)
-    - Converts cart items into an order and simulates payment (POST)
+    - GET: Display cart items and total
+    - POST: Create order, process payment, and clear cart
     """
 
-    # Load the current user's cart and its items with product details
+    # Load user's cart and items
     cart = Cart.query.options(
         joinedload(Cart.items).joinedload(CartItem.product)
     ).filter_by(user_id=current_user.id).first()
 
-    # If cart is empty, redirect to home
     if not cart or not cart.items:
         flash("Your cart is empty", "info")
         return redirect(url_for("views.home"))
@@ -159,40 +158,51 @@ def checkout():
     grand_total = sum(item.quantity * item.product.price for item in cart.items)
 
     if request.method == "POST":
-        # 1️⃣ Create the order
-        order = Order(user_id=current_user.id)
-        db.session.add(order)
-        db.session.flush()  # assign order.id
+        try:
+            # 1️⃣ Create Order
+            order = Order(user_id=current_user.id)
+            db.session.add(order)
+            db.session.flush()  # assign order.id
 
-        # 2️⃣ Move cart items to order items
-        for item in cart.items:
-            order_item = OrderItem(
-                order_id=order.id,
-                product_id=item.product.id,
-                quantity=item.quantity,
-                price=item.product.price  # snapshot
-            )
-            db.session.add(order_item)
+            # 2️⃣ Move cart items to order items
+            for item in cart.items:
+                order_item = OrderItem(
+                    order_id=order.id,
+                    product_id=item.product.id,
+                    quantity=item.quantity,
+                    price=item.product.price
+                )
+                db.session.add(order_item)
 
-            # Reduce product stock
-            if item.product.stock >= item.quantity:
-                item.product.stock -= item.quantity
-            else:
-                flash(f"Insufficient stock for {item.product.name}", "error")
-                return redirect(url_for("cart.view_cart"))
+                # Reduce stock
+                if item.product.stock >= item.quantity:
+                    item.product.stock -= item.quantity
+                else:
+                    raise Exception(f"Insufficient stock for {item.product.name}")
 
-            # Remove item from cart
-            db.session.delete(item)
+                # Remove from cart
+                db.session.delete(item)
 
-        order.total_amount = grand_total
-        db.session.commit()
+            # 3️⃣ Assign total amount
+            order.total_amount = grand_total
+            db.session.flush()
 
-        # 3️⃣ Process payment using PaymentService
-        payment = PaymentService.process_payment(current_user, grand_total)
+            # 4️⃣ Process payment
+            payment = PaymentService.process_payment(user=current_user, amount=grand_total)
 
-        # 4️⃣ Flash success message
-        flash(f"Payment of ₹{payment.amount:.2f} successful! Your order has been placed.", "success")
-        return redirect(url_for("orders.order_history"))
+            # Optionally, you can link payment to order if your Order model has a payment_id
+            # order.payment_id = payment.id
+
+            # 5️⃣ Commit all changes
+            db.session.commit()
+
+            flash("Your order has been placed successfully!", "success")
+            return redirect(url_for("orders.order_history"))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Checkout failed: {str(e)}", "error")
+            return redirect(url_for("cart.view_cart"))
 
     # GET request: show checkout page
     return render_template("checkout.html", items=cart.items, grand_total=grand_total)

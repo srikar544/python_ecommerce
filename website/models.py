@@ -239,6 +239,8 @@ class Order(db.Model):
         lazy=True
     )
 
+    user = db.relationship("User", backref="orders")  # <-- add this
+
     def __repr__(self):
         return f"<Order {self.id} User {self.user_id}>"
 

@@ -42,6 +42,18 @@
                 </tbody>
             </table>
 
+            <!-- PAYMENT INFO -->
+            {% set payment = order.user.payments | selectattr("created_at", "equalto", order.created_at) | list | first %}
+            {% if payment %}
+                <p>
+                    Payment Status: <strong>{{ payment.status }}</strong><br>
+                    Paid Amount: ₹{{ "%.2f"|format(payment.amount) }}<br>
+                    Paid At: {{ payment.created_at.strftime('%d %b %Y %H:%M') }}
+                </p>
+            {% else %}
+                <p>Payment not found.</p>
+            {% endif %}
+
             <hr>
         </div>
     {% endfor %}
