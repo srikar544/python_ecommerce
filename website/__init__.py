@@ -117,6 +117,7 @@ def create_app():
     @app.context_processor
     def inject_cart_count():
         # Import here to avoid circular import issues
+        #Run this function before rendering any template, and add whatever it returns to the template context.”
         from .models import Cart
 
         # Only check cart if user is logged in
